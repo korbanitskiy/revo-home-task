@@ -1,0 +1,38 @@
+1. Write down a query that gives us a breakdown of spend in GBP by each user. Use the exchange rate with the largest timestamp. 
+
+    SELECT transactions.user_id,
+           transactions.amount * COALESCE(actual_exchange_rate.rate, 1) as total_spent_gbp
+    FROM transactions
+    LEFT OUTER JOIN (
+            SELECT DISTINCT ON (from_currency) from_currency, rate
+            FROM exchange_rates
+            WHERE to_currency = 'GBP'
+            ORDER BY from_currency, ts DESC
+    ) as actual_exchange_rate ON actual_exchange_rate.from_currency = transactions.currency
+
+    ORDER BY transactions.user_id;
+
+2. (If you consider yourself senior) Write down the same query, but this time, use the latest exchange rate smaller or equal than the transaction timestamp. 
+   Solution should have the two columns: user_id, total_spent_gbp, ordered by user_id
+   
+   SELECT transactions.user_id,
+          transactions.amount * COALESCE (
+            (
+                SELECT rate
+                FROM exchange_rates
+                WHERE from_currency = transactions.currency
+                AND ts <= transactions.ts
+                AND to_currency = 'GBP'
+                ORDER BY ts DESC
+                LIMIT 1
+            ), 1
+       )
+    FROM transactions
+    ORDER BY transactions.user_id;
+
+3. Bonus for postgres superstars: Consider same schema, but now let’s add some random data. 
+   Write a solution for the previous task. Please ensure It executes within 5 seconds.
+
+    CREATE INDEX IF NOT EXISTS ix_ts ON exchange_rates (ts);
+    
+    explain analyze (previous qs) -> Planning time: 0.246 ms; Execution time: 421.571 ms

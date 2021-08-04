@@ -2,7 +2,10 @@ SQL
 
 Please see http://sqlfiddle.com/#!17/3ff32 or https://dbfiddle.uk/?rdbms=postgres_9.6&fiddle=6eeee53c62aef4e84720cf4074a81e9a  for database schema.
 
-Given the transactions table and table containing exchange rates. Exchange rate timestamps are rounded to second, transactions are rounded up to millisecond. We have only data for one day, 1st of April, 2018. Please note there are no exchange rate from GBP to GBP as it is always 1
+Given the transactions table and table containing exchange rates. 
+Exchange rate timestamps are rounded to second, transactions are rounded up to millisecond. 
+We have only data for one day, 1st of April, 2018. 
+Please note there are no exchange rate from GBP to GBP as it is always 1
 
     1. Write down a query that gives us a breakdown of spend in GBP by each user. Use the exchange rate with the largest timestamp. 
     2. (If you consider yourself senior) Write down the same query, but this time, use the latest exchange rate smaller or equal than the transaction timestamp. Solution should have the two columns: user_id, total_spent_gbp, ordered by user_id

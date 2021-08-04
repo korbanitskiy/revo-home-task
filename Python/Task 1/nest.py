@@ -29,7 +29,7 @@ def create_group(arr, keys):
 
 
 def groupify_arr(arr, key):
-    """Group array if dicts to dict of array according to key"""
+    """Group array of dicts to dict of array according to key"""
     container = {}
     for row in arr:
         group_key = row.pop(key)
